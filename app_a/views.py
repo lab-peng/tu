@@ -1,3 +1,4 @@
+from re import template
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
@@ -6,6 +7,9 @@ from .models import Project, Document
 
 def index(request):
     return render(request, 'app_a/index.html')
+
+class ProjectList(ListView):
+    model = Project
 
 class ProjectDetail(DetailView):
     model = Project

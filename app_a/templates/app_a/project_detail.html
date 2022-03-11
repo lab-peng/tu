@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+{% load static %}
 <html>
   <head>
     <meta charset="utf-8" />
@@ -14,21 +11,34 @@
   </head>
   <body>
     <h1>{{ object.name }}</h1>
+    <a href="{% url 'app_a:project_list'  %}">BACK TO LIST</a>
+    <hr />
 
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <input type="file" name="file" multiple />
-      <input type="submit" value="上传" />
+      批量上传：
+      <img id="upload-icon" src="http://www.hanselman.com/blog/content/binary/Windows-Live-Writer/There-is-only-one-Cloud-Icon-in-the-Enti_137BD/image_d64843a5-92db-44cd-98ec-cc1f74c05526.png" width="30">
+      <input type="file" class="auto-submit" name="file" multiple  hidden>
     </form>
-    
+
     <ul>
       {% for document in object.document_set.all %}
-        <li>
-          {{ document.filename }}
-          <a href="{{ document.file.url }}">下载</a>
-          <a href="{% url 'app_a:delete_file' object.pk document.pk %}">删除</a>
-        </li>
+      <li>
+        {{ document.filename }}
+        <a href="{{ document.file.url }}">下载</a>
+        <a href="{% url 'app_a:delete_file' object.pk document.pk %}">删除</a>
+      </li>
       {% endfor %}
     </ul>
+    <script src="{% static 'common/jquery-3.6.0.min.js' %}"></script>
+    <script>
+      $('#upload-icon').click(function(){
+        $('input[name="file"]').click();
+      });
+      
+      $('form .auto-submit').on('change', function() {
+        this.form.submit();
+     });
+    </script>
   </body>
 </html>

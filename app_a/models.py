@@ -12,7 +12,7 @@ class Project(models.Model):
     
 
 class Document(models.Model):
-  file = models.FileField('Document', upload_to='mydocs/')
+  file = models.FileField('Document', upload_to='project_docs/')
   project = models.ForeignKey(Project, on_delete=models.CASCADE)
 
   @property
