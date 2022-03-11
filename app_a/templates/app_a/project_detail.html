@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="" />
+  </head>
+  <body>
+    <h1>{{ object.name }}</h1>
+
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="file" name="file" multiple />
+      <input type="submit" value="上传" />
+    </form>
+    
+    <ul>
+      {% for document in object.document_set.all %}
+        <li>
+          {{ document.filename }}
+          <a href="{{ document.file.url }}">下载</a>
+          <a href="{% url 'app_a:delete_file' object.pk document.pk %}">删除</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
