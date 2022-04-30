@@ -7,6 +7,9 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="">
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> 
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>    <!-- vue.js for dev -->
+        <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script>   -->      <!-- vue.js for prod -->
     </head>
     <body>
         <table>
@@ -21,7 +24,33 @@
             </tr>
             {% endfor %}
         </table>
-        
-        <script src="" async defer></script>
+
+        <hr>
+        <div id="app">
+            <button @click="toggleLovHate()">Click Me & See</button>
+            <h1>[[ message ]]</h1>
+        </div>
+
+
+
+
+        <script>
+            axios.defaults.xsrfCookieName = 'csrftoken';
+            axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+        </script>
+        <script>
+        var app = new Vue({
+            delimiters: ["[[", "]]"],
+            el: '#app',
+            data: {
+                message: 'Reason',
+            },
+            methods: {
+                toggleLovHate: function() {
+                    this.message = ('Passion' === this.message) ? 'Reason' : 'Passion';
+                }
+            }
+          });
+          </script>
     </body>
 </html>
