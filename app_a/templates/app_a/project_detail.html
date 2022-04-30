@@ -11,77 +11,69 @@
   </head>
   <body>
     <div id="app">
-    <h1>{{ object.name }}</h1>
-    <a href="{% url 'app_a:project_list'  %}">BACK TO LIST</a>
-    <hr />
+      <h1>{{ object.name }}</h1>
+      <a href="{% url 'app_a:project_list'  %}">BACK TO LIST</a>
+      <hr />
 
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      Click to Upload
-      <img id="upload-icon" src="{% static 'images/upload.png' %}" width="50">
-      <input type="file" class="auto-submit" name="file" multiple  hidden>
-    </form>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %} Click to Upload
+        <img
+          id="upload-icon"
+          src="{% static 'images/upload.png' %}"
+          width="50"
+        />
+        <input type="file" class="auto-submit" name="file" multiple hidden>
+      </form>
 
-    <ul id="documents">
-      {% for document in object.document_set.all %}
-      <li>
-        {{ document.filename }}
-        <a href="{{ document.file.url }}">下载</a>
-        <button @click="del_file(this, '{{ document.pk }}')">
-          Delete
-        </button>
-      </li>
-      {% endfor %}
-    </ul>
+      <ul id="documents">
+        {% for document in object.document_set.all %}
+        <li>
+          {{ document.filename }}
+          <a href="{{ document.file.url }}" target="_blank">下载</a>
+          <a class="delete_file" href={% url 'app_a:delete_file' document.pk %}>删除</a>
+        </li>
+        {% endfor %}
+      </ul>
     </div>
 
     <script src="{% static 'common/jquery-3.6.0.min.js' %}"></script>
     <script>
+      // csrf setup for ajax post, put, delete request
+      $(function() {
+        $.ajaxSetup({
+            headers: {
+              "X-CSRFToken": $('[name=csrfmiddlewaretoken]').val()
+            }
+        })
+     });
 
-      $('#upload-icon').click(function(){
+      $("#upload-icon").click(function () {
         $('input[name="file"]').click();
       });
-      
-      $('form .auto-submit').on('change', function(e) {
-        this.form.submit();
-     });
-    </script>
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> 
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
-      axios.defaults.xsrfCookieName = 'csrftoken';
-      axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-    </script>
 
-    <script>
-    var app = new Vue({
-        delimiters: ["[[", "]]"],
-        el: '#app',
-        data: {
-            message: 'Reason',
-        },
-        methods: {
-            toggleLovHate: function() {
-                this.message = ('Passion' === this.message) ? 'Reason' : 'Passion';
-            },
-            del_file: function(e, doc_pk) {
-                let pro_pk = "{{ object.pk }}";
-                console.log(pro_pk, doc_pk)
-                axios.post("{% url 'app_a:del_file' %}", {
-                    pro_pk: pro_pk,
-                    doc_pk: doc_pk,
-                }).then(function(response) {
-                  let status = response.data.status;
-                  if (status == 'success') {
-                    console.log('ok')
-                  }
-                }).catch(function(error) {
-                    console.log(error);
-                });
-            }
-        }
+      $("form .auto-submit").on("change", function (e) {
+        const serializedData = $(this.form).serialize();
+        console.log(serializedData);
+       // this.form.submit();
       });
-      </script>
 
+      
+
+      // Delete File
+      $('#documents').on('click', '.delete_file', function (e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        var that = this;
+        $.ajax({
+          url: url,
+          type: 'DELETE',
+          success: function (data) {
+            if (data.status) {
+              $(that).parent().fadeOut();
+            }
+          }
+        });
+      });
+    </script>
   </body>
 </html>

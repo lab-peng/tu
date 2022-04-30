@@ -1,2 +1,42 @@
 app_a: multiple file upload
 https://stackoverflow.com/questions/39525188/upload-multiple-files-in-django
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      axios.defaults.xsrfCookieName = "csrftoken";
+      axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+    </script>
+    <script>
+      var app = new Vue({
+        delimiters: ["[[", "]]"],
+        el: "#app",
+        data: {
+          message: "Reason",
+        },
+        methods: {
+          toggleLovHate: function () {
+            this.message = "Passion" === this.message ? "Reason" : "Passion";
+          },
+          del_file: function (e, doc_pk) {
+            let pro_pk = "{{ object.pk }}";
+            console.log(pro_pk, doc_pk);
+            axios
+              .post("{% url 'app_a:del_file' %}", {
+                pro_pk: pro_pk,
+                doc_pk: doc_pk,
+              })
+              .then(function (response) {
+                let status = response.data.status;
+                if (status == "success") {
+                  console.log("ok");
+                }
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          },
+        },
+      });
+    </script>
