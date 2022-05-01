@@ -22,18 +22,24 @@ class ProjectDetail(DetailView):
 
 
     def post(self, request, *args, **kwargs):
+        # print(self.request.POST, self.request.FILES)
+        data = []
         for f in self.request.FILES.getlist('file'):
-            Document.objects.create(file=f, project=self.get_object())
-        documents = [{'d_pk': d.pk, 'd_file': d.file.url } for d in self.get_object().document_set.all()]
-        print(documents)
-        return JsonResponse(documents, safe=False)
-        # return redirect('app_a:project_detail', pk=self.get_object().pk)
+            d = Document.objects.create(file=f, project=self.get_object())
+            data.append(d)
+        data = [{'d_pk': d.pk, 'd_file': d.file.url, 'd_filename':d.filename } for d in data]
+        return JsonResponse(data, safe=False)
 
 def delete_file(request, pk):
     doc = get_object_or_404(Document, pk=pk)
     doc.file.delete()
     doc.delete()
     return JsonResponse({'status': 1}, safe=False)
+
+
+
+
+
 
 def del_file(request):
     data = json.loads(request.body.decode('utf-8'))

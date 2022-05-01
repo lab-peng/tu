@@ -7,6 +7,7 @@
     <title></title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
     <link rel="stylesheet" href="" />
   </head>
   <body>
@@ -15,14 +16,14 @@
       <a href="{% url 'app_a:project_list'  %}">BACK TO LIST</a>
       <hr />
 
-      <form method="post" enctype="multipart/form-data">
+      <form method="post" enctype="multipart/form-data" id="upload_form">
         {% csrf_token %} Click to Upload
         <img
           id="upload-icon"
           src="{% static 'images/upload.png' %}"
           width="50"
         />
-        <input type="file" class="auto-submit" name="file" multiple hidden>
+        <input type="file" class="auto-submit" name="file" id="id_file" multiple hidden>
       </form>
 
       <ul id="documents">
@@ -52,10 +53,32 @@
       });
 
       $("form .auto-submit").on("change", function (e) {
-        const serializedData = $(this.form).serialize();
-        console.log(serializedData);
-       // this.form.submit();
+        e.preventDefault;
+         let data = new FormData($(this.form)[0]);
+        //this.form.submit();
+        $.ajax({
+          url: "/app_a/project/" + '{{ object.pk }}' + "/",
+          type: "POST",
+          data: data,
+          processData: false,
+          contentType: false,
+          success: function (data) {
+            for (let i = 0; i < data.length; i++) {
+              $("#documents").prepend(
+                `<li>
+                  ${data[i].d_filename}
+                  <a href="${data[i].d_file}" target="_blank">下载</a>
+                  <a class="delete_file" href="/app_a/delete_file/${data[i].d_pk}/">删除</a>
+                </li>`
+              );
+            }
+          },
+          error: function (data) {
+            console.log(data);
+          }
+        });
       });
+
 
       
 

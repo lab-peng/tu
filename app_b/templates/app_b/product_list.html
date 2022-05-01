@@ -1,0 +1,23 @@
+{% extends 'app_b/base.html' %}
+
+    
+    
+{% block content %}
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th></th>
+    </tr>
+    {% for p in product_list %}
+    <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.name }}</td>
+        <td>
+            <a href="{% url 'app_b:product_update' p.pk %}">Edit</a>
+            {% comment %} <a href="{{ url_for('app_b.delete_user', id=user.id) }}">Delete</a> {% endcomment %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
