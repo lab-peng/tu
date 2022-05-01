@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid" id="form" style="display:none;">
+    <form id="friend-form" novalidate>
+        <div class="row">
+            {% csrf_token %}
+            <input type="hidden" name="sid" value="">
+            {% for field in form %}
+            <div class="form-group col-4">
+                <label class="col-12">{{ field.label }}</label>
+                {{ field }}
+                <div style="color:red;" id="{{ field.name}}_error"></div>
+            </div>
+                
+            {% endfor %}
+            
+            <div class = "col text-center">
+                <button type="button" class="btn btn-primary" id="cancel">Cancel</button>
+                <input type="submit" class="btn btn-primary" value="Submit" />
+            </div>
+
+        </div>
+    <form>
+</div>
+<button id='show-form' type="button">Create a Friend</button>
+<hr />
+
+<div class="container-fluid">
+    <table class="table table-striped table-sm" id="my_friends">
+        <thead>
+            <tr>
+                <th>Nick name</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Likes</th>
+                <th>DOB</th>
+                <th>lives in</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+        {% for friend in friends %}
+        <tr id="{{friend.pk}}">
+            <td>{{friend.nick_name}}</td>
+            <td>{{friend.first_name}}</td>
+            <td>{{friend.last_name}}</td>
+            <td>{{friend.likes}}</td>
+            <td>{{friend.dob | date:"Y-m-d"}}</td>
+            <td>{{friend.lives_in|default_if_none:""}}</td>
+            <td>
+                <input type="image" src="{% static 'icons8-edit-32.png' %}"  width="20" value="Edit" class="btn-update mr-20" data-sid="{{friend.pk}}">
+                <input type="image" src="{% static 'icons8-remove-50.png' %}"  width="20" value="Delete" class="btn-del" data-sid="{{friend.pk}}">
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock content %}
+
+
+{% block javascript %}
+<script>
+
+
+    $(function () {
+
+        $.ajaxSetup({
+            headers: {
+              "X-CSRFToken": $('[name=csrfmiddlewaretoken]').val()
+            }
+        })
+
+        
+        $('#show-form').click(function(){
+            $('#form').show();
+            $("#friend-form").trigger('reset');
+            $('[name="sid"]').val('');
+        });
+
+        $('#cancel').click(function(){
+            $('#form').hide();
+        });
+
+        /*
+            On submiting the form, send the POST ajax
+            request to server and after successfull submission
+            display the object.
+        */
+        $("#friend-form").submit(function (e) {
+            // preventing from page reload and default actions
+            e.preventDefault();
+            // serialize the data for sending the form data.
+            const serializedData = $(this).serialize();
+            const fields = ["nick_name", "first_name", "last_name", "likes", "dob", "lives_in"];
+            console.log(serializedData);
+            // make POST ajax call
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'app_c:create_update_friend' %}",
+                data: serializedData,
+                success: function (response) {
+                    // on successfull creating object
+                    if (response.instance) {
+                    // 1. clear the form and error message
+                    $("#friend-form").trigger('reset');
+                    for (let i = 0; i < fields.length; i++) {
+                        $("#" + fields[i] + "_error").html("");
+                    }
+                    // 2. focus to nickname input 
+                    $("#id_nick_name").focus();
+
+                    // optional: close the form
+                    $('#form').hide();
+                    // display the newly friend to table.
+                    let instance = response.instance;
+                    console.log(instance.id, typeof instance.id);
+                    let sids = $("#tbody").find("tr").map(function () {
+                        return $(this).attr("id");
+                    }).get();
+                    console.log(sids);
+                    if (!sids.includes(instance.id.toString())){
+                        console.log(0)
+                        $("#my_friends tbody").prepend(
+                        `<tr id=${instance.id}>
+                        <td>${instance.nick_name||""}</td>
+                        <td>${instance.first_name||""}</td>
+                        <td>${instance.last_name||""}</td>
+                        <td>${instance.likes||""}</td>
+                        <td>${instance.dob||""}</td>
+                        <td>${instance.lives_in||""}</td>
+                        <td>
+                            <input type="image" src="/static/icons8-edit-32.png"  width="20" value="Edit" class="btn-update mr-20" data-sid=${instance.id}>
+                            <input type="image" src="/static/icons8-remove-50.png" width="20" value="Delete" class="btn-del" data-sid=${instance.id}>
+                        </td>
+                        </tr>`
+                    )} else {
+                        console.log(1);
+                        $("#" + instance.id).replaceWith(
+                            `<tr id=${instance.id}>
+                        <td>${instance.nick_name||""}</td>
+                        <td>${instance.first_name||""}</td>
+                        <td>${instance.last_name||""}</td>
+                        <td>${instance.likes||""}</td>
+                        <td>${instance.dob||""}</td>
+                        <td>${instance.lives_in||""}</td>
+                        <td>
+                            <input type="image" src="/static/icons8-edit-32.png"  width="20" value="Edit" class="btn-update mr-20" data-sid=${instance.id}>
+                            <input type="image" src="/static/icons8-remove-50.png" width="20" value="Delete" class="btn-del" data-sid=${instance.id}>
+                        </td>
+                        </tr>`
+                        );
+                        $('[name="sid"]').val('');
+                    }
+                } else {
+                        // on error display the error message.
+                        let errors = response.errors;
+                        for (let i = 0; i < fields.length; i++) {
+                            let field = fields[i];
+                            let error = errors[field];
+                            if (error) {
+                                $("#" + field + "_error").html(error);
+                            } else {
+                                $("#" + field + "_error").html("");
+                            }
+                        }
+                    }
+
+                },
+
+            })
+        })
+
+        /* Populate the form with data of to-be-edited instance */ 
+        $('#tbody').on("click", ".btn-update", function(e) {
+            e.preventDefault();
+            const row = $(this).closest("tr");
+            let sid = $(this).attr("data-sid");
+            console.log(sid);
+            $('#form').show();
+            $('[name="sid"]').val(sid);
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'app_c:edit_friend' %}",
+                data: {
+                    sid: sid
+                },
+                success: function (response) {
+                    console.log(response);
+                    if (response.instance) {
+                        let instance = response.instance;
+                        $("#id_nick_name").val(instance.nick_name);
+                        $("#id_first_name").val(instance.first_name);
+                        $("#id_last_name").val(instance.last_name);
+                        $("#id_likes").val(instance.likes);
+                        $("#id_dob").val(instance.dob);
+                        $("#id_lives_in").val(instance.lives_in);
+                    }
+                },
+            })
+        })
+
+        /* Delete Friend */
+        $('#tbody').on("click", ".btn-del", function(e) {
+            e.preventDefault();
+            const row = $(this).closest("tr");
+            let sid = $(this).attr("data-sid");
+            console.log(sid);
+            $.ajax({
+                type: 'POST',
+                url: '{% url "app_c:delete_friend" %}',
+                data: {
+                    "sid": sid
+                },
+                success: function(response) {
+                    if (response.status) {
+                        // row.remove();
+                        row.fadeOut();
+                    } else {
+                        alert("Error deleting friend");
+                    }
+                }
+            })
+        })
+
+        /*
+        On focus out on input nickname,
+        call AJAX get request to check if the nickName
+        already exists or not.
+        */
+        /* $("#id_nick_name").focusout(function (e) {
+            e.preventDefault();
+            // get the nickname
+            var nick_name = $(this).val();
+            // GET AJAX request
+            $.ajax({
+                type: 'GET',
+                url: "{% url 'app_c:validate_nickname' %}",
+                data: {"nick_name": nick_name},
+                success: function (response) {
+                    // if not valid user, alert the user
+                    if(!response["valid"]){
+                        $("#nick_name_error").html("You cannot create a friend with same nick name");
+                        var nickName = $("#id_nick_name");
+                        nickName.val("")
+                        nickName.focus()
+                    } else {
+                        $("#nick_name_error").html("");
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            })
+        }) */
+    })
+</script>
+{% endblock javascript %}

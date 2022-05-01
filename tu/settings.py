@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     'app_a',
     'app_b',
+    'app_c',
     'photos',
 ]
 
