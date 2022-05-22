@@ -120,7 +120,6 @@ $(function () {
                         location.href = '/app_d/'
                     } else {
                         // on successfull updating objects
-                        // location.href = '/app_d/'
                         $('.create-overlay').css('display', 'none');
                         const instance = response.instance;
                         $("#" + instance.id).replaceWith(
