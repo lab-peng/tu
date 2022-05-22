@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'app_a',
     'app_b',
     'app_c',
+    'app_d',
+    'app_e',
     'photos',
 ]
 
@@ -143,3 +145,7 @@ INTERNAL_IPS = [
     '127.0.0.1',
     'localhost',
 ]
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda r: False,  # disables it
+}

@@ -25,6 +25,8 @@ urlpatterns = [
     path('app_a/', include('app_a.urls')),
     path('app_b/', include('app_b.urls')),
     path('app_c/', include('app_c.urls')),
+    path('app_d/', include('app_d.urls')),
+    path('app_e/', include('app_e.urls')),
     path('photos/', include('photos.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

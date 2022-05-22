@@ -1,0 +1,32 @@
+
+<!-- 1 youtube header and sidebar (a barebone one at first) -->
+1 oa header and sidebar   profile picture should be put on the top right corner( an icon)
+2 data  table 
+3 modal box as form 
+4 form validation with ajax 
+
+
+django 10 different field types
+
+
+
+
+VS CODE 折叠
+Ctrl + k  Ctrl + 0
+Ctrl + k  Ctrl + j
+
+如果jquery append 的 html 里面的input checkbox 或者其他的动作没有反应的话，基本上是需要parent reference
+https://stackoverflow.com/questions/25568593/on-click-not-working-after-appending-checkbox-elements-in-jquery
+
+
+controller(clicking) and view(rendering) should be seperate
+
+contst renderFunction = () => {
+    .....
+}
+
+then 
+$(parent).find('.child').click(function(){
+    renderFunction();
+})
+
