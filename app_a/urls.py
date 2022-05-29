@@ -8,5 +8,7 @@ urlpatterns = [
     path('project/<int:pk>/', views.ProjectDetail.as_view(), name='project_detail'),
     path('delete_file/<int:pk>/', views.delete_file, name='delete_file'),
     path('del_file/', views.del_file, name='del_file'),
+
+    path('tianditu/', views.tianditu, name='tianditu')
 ]
 

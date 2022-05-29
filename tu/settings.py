@@ -129,8 +129,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_URL = '/static/' # put static files in app folder in dev only need this line
+STATICFILES_DIRS = [BASE_DIR / 'static']  # put (addtional) static files in root in dev
+# STATIC_ROOT = BASE_DIR / 'static' # put static files in root in production
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'

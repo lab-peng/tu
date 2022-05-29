@@ -36,11 +36,6 @@ def delete_file(request, pk):
     doc.delete()
     return JsonResponse({'status': 1}, safe=False)
 
-
-
-
-
-
 def del_file(request):
     data = json.loads(request.body.decode('utf-8'))
     pro_pk = data.get('pro_pk')
@@ -51,8 +46,8 @@ def del_file(request):
     doc.delete()
     return JsonResponse({'status': 'success'})
 
-# figure out how to remove the element from the list item clicked delete
-# TODO find a youtube video on how to crud a todo list
+def tianditu(request):
+    return render(request, 'app_a/tdt.html')
 
 
 

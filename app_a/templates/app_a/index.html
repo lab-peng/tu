@@ -1,1 +1,53 @@
-HELLO APP_A INDEX
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'app_a/css/index.css' %}">
+</head>
+<body>
+    <div class="header">
+        <img src="{% static 'app_a/images/logo.png' %}" alt="" width="47">
+    </div>
+    <div class="main">
+        <div class="top">
+            <h1>MY EXPERIMENTS</h1>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum, dolor sit amet consectetur adipisicing elit?</p>
+        </div>
+        <!-- <div class="container"> -->
+            <div class="todays-picks">
+                <!-- <h1></h1> -->
+                <div class="card">
+                    <a href="{% url 'app_d:list' %}">Django Ajax Crud with Modal</a>
+                </div>
+                <div class="card">
+                    <a href="{% url 'app_a:project_list' %}">Django Ajax File Uploading Without Extra Library</a>
+                </div>
+                <div class="card">
+                    <a href="#">App B</a>
+                </div>
+                <div class="card">
+                    <a href="/app_c/">App C</a>
+                </div>
+                <div class="card">
+                    <a href="/photos/">Django Ajax File Uploading (Status Bar)</a>
+                </div>
+                <div class="card">
+                    <a href="/app_e/">App E</a>
+                </div>
+            </div>
+            <!-- <div class="category">
+                <div class="category-header"></div>
+                <div class="category-picks">
+                    <div class="c-picks-container"></div>
+                    <div class="c-picks-container"></div>
+                </div>
+            </div> -->
+        <!-- </div> -->
+    </div>
+    
+</body>
+</html>

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
     <head>
         <meta charset="utf-8">
@@ -6,12 +7,16 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="{% static 'app_a/css/style.css' %}">
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> 
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>    <!-- vue.js for dev -->
         <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script>   -->      <!-- vue.js for prod -->
     </head>
     <body>
+        <div>
+            <a href="/">Back Home</a>
+        </div>
+        <h1>Project List</h1> 
         <table>
             <tr>
                 <th>ID</th>
@@ -27,7 +32,7 @@
 
         <hr>
         <div id="app">
-            <button @click="toggleLovHate()">Click Me & See</button>
+            <button class="sample-button" @click="toggleLovHate()">Click Me & See</button>
             <h1>[[ message ]]</h1>
         </div>
 
