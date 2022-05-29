@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    padding-top: 48px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 48px;
+    background-color: rgb(255, 255, 255);
+    
+    text-align: center;
+}
+
+.main {
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    margin-left: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+
+    min-height: calc(100vh - 48px);
+}
+
+
+.top {
+    margin: 84px 0 0 0;
+    width: 1020px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.top h1 {
+    color: rgb(255, 255, 255);
+    text-align: center;
+
+    font-size: 3.5rem;
+    letter-spacing: 0.1rem;
+}
+
+.top p {
+    font-size: 1.5rem;
+}
+
+.todays-picks {
+    width: 1020px;
+    /* text-align: ; */
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    row-gap: 1rem;
+}
+
+/* .todays-picks .card {
+
+} */
+
+.todays-picks .card a {
+    color: rgb(255, 255, 255);
+    text-align: none;
+    font-size: 1.5rem;
+    text-decoration: none;
+    transform: color 0.15s, text-decoration 0.15s;
+}
+
+.todays-picks .card a:hover {
+    text-decoration: underline;
+    color: grey;
+
+}

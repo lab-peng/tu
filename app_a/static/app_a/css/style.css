@@ -1,0 +1,64 @@
+body {
+    font-family: Jetbrains Mono, monospace;
+}
+
+/* project-list */
+table {
+    width: 50%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+table tr td {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+th {
+    background-color: #24695c;
+    border-right: 1px solid #ccc;
+    color: white;
+    text-align: left;
+    padding: 15px;
+}
+
+/* project-detail */
+.file-form {
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    column-gap: 1rem;
+  }
+
+.file-form img {
+    cursor: pointer;
+    background-color: transparent;
+    border-radius: 50px;
+    transform: background-color 0.15s;
+}
+
+.file-form img:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.sample-button {
+    background-color: #24695c;
+    color: white;
+    padding: 5px 10px;
+    font-weight: 700;
+    border-radius: 0.2rem;
+    border: none;
+    cursor: pointer;
+    transform: opacity 0.15s;
+}
+
+.sample-button:hover {
+    background-color: #24695c;
+    opacity: 0.8;
+    color: white;
+}
+
