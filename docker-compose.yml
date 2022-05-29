@@ -1,0 +1,31 @@
+version: '3.10'
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+    image: django-tu:1.0
+    container_name: django-tu-container
+    command: python manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db
+  db:
+    image: mysql:8.0
+    container_name: django-tu-db-container
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tu
+    volumes:
+      - ./db:/var/lib/mysql
+
+  esearch:
+    container_name: django-tu-esearch-container
+    image: elasticsearch:7.14.2
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+
+

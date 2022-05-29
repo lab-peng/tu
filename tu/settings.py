@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'django_extensions',
     'debug_toolbar',
+    'django_elasticsearch_dsl',
 
     'app_a',
     'app_b',
@@ -88,12 +89,25 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'tu',
-        'HOST': 'localhost',
+        # 'HOST': 'localhost',
+        'HOST': 'host.docker.internal',
         'USER': 'root',
         'PASSWORD': 'root',
     }
 }
 
+ELASTICSEARCH_DSL={
+    'default': {
+        'hosts': 'host.docker.internal:9200'
+    },
+}
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

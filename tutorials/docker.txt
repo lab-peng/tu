@@ -1,0 +1,32 @@
+
+@dockerfile
+
+docker build -t [image_name]:[image_tag] [dockerfile_path]
+
+docker build -t django-tu:1.0 .
+
+
+docker container run -p [local_port]:[container_port] [image_name]:[image_tag]
+
+docker run -p 8001:8000 django-tu:1.0
+
+
+@docker-compose.yml
+docker-compose build
+docker-compose up
+
+mysql database setup should be: 'HOST': 'host.docker.internal',
+
+# elastic search 
+docker exec -it django-tu-container /bin/bash
+
+    curl -X GET host.docker.internal:9200/_cluster/health # check elastic search status
+    python manage.py search_index --rebuild
+
+    from app_d.documents import SampleModelDocument
+    s = SampleModelDocument.search().filter("term", char="")
+    qs = s.to_queryset()
+    qs
+
+    SampleModelDocument.search().count() is OK
+    # SampleModelDocument.search().filter("term", char="").count() filter and match is not working !!!!!!!
