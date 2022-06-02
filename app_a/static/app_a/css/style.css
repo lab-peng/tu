@@ -25,26 +25,6 @@ th {
     padding: 15px;
 }
 
-/* project-detail */
-.file-form {
-    width: 20%;
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    column-gap: 1rem;
-  }
-
-.file-form img {
-    cursor: pointer;
-    background-color: transparent;
-    border-radius: 50px;
-    transform: background-color 0.15s;
-}
-
-.file-form img:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
 .sample-button {
     background-color: #24695c;
     color: white;
@@ -62,3 +42,99 @@ th {
     color: white;
 }
 
+/* project update  */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* background-color: #24695c; */
+}
+
+.app {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    row-gap: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.form-control {
+    padding: 0.5rem 0;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+}
+
+
+/* project-update */
+
+h1{
+    padding: 1rem;
+}
+.file-form {
+    padding: 1rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    column-gap: 1rem;
+  }
+
+.file-form img {
+    cursor: pointer;
+    background-color: transparent;
+    border-radius: 50px;
+    transform: background-color 0.15s;
+}
+
+.file-form img:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.documents {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.document-card {
+    height: 12rem;
+    overflow: hidden;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.document-card a {
+    font-size: 1.5rem;
+    text-decoration: none;
+    color: gray;
+}
+
+.document-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.submit {
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.submit-button {
+    padding: 0.5rem 2rem;
+    border: none;
+    background-color: #24695c;
+    font-size: 1.8rem;
+    color: white;
+    border-radius: 0.2rem;
+    cursor: pointer;
+}

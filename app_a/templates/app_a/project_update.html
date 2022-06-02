@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'app_a/css/style.css' %}" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="app" id="app">
+            <h1>{{ object.name }} <span style="font-size: 1rem; font-weight: 400;"><a href="{% url 'app_a:project_list'  %}">BACK TO LIST</a></span></h1>
+            
+            <hr />
+            <form id="submit-form" class="file-form" method="post">
+                {% csrf_token %}
+                {{ form }}
+            </form>
+
+            <form method="post" enctype="multipart/form-data" id="upload_form" class="file-form">
+                {% csrf_token %}
+                <span>Click to Upload</span>
+                <img id="upload-icon" src="{% static 'app_a/images/upload.png' %}" width="50" />
+                <input type="file" class="auto-submit" name="file" id="id_file" multiple hidden>
+            </form>
+
+            <div id="documents" class="documents">
+                {% for document in object.document_set.all %}
+                <div class="document-card">
+                    <div>{{ document.filename }}</div>
+                    <div class="document-buttons">
+                        <a href="{{ document.file.url }}" target="_blank">📩</a>
+                        <a class="delete_file" href="{% url 'app_a:delete_file' document.pk %}">❌</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="submit">
+                <button class="submit-button" id="submit-button" type="button">Sumit</button>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'common/jquery-3.6.0.min.js' %}"></script>
+    <script>
+        // csrf setup for ajax post, put, delete request
+        $(function () {
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRFToken": $('[name=csrfmiddlewaretoken]').val()
+                }
+            })
+        });
+
+        $("#upload-icon").click(function () {
+            $('input[name="file"]').click();
+        });
+
+        $("form .auto-submit").on("change", function (e) {
+            e.preventDefault;
+            let data = new FormData($(this.form)[0]);
+            //this.form.submit();
+            $.ajax({
+                url: "/project/" + '{{ object.pk }}' + "/",
+                type: "POST",
+                data: data,
+                // The below two are necessary to add for uploading files
+                processData: false, 
+                contentType: false,
+                success: function (data) {
+                    for (let i = 0; i < data.length; i++) {
+                        $("#documents").prepend(
+                            `<div class="document-card">
+                                <div>${data[i].d_filename}</div>
+                                <div class="document-buttons">
+                                    <a href="${data[i].d_file}" target="_blank">📩</a>
+                                    <a class="delete_file" href="/delete_file/${data[i].d_pk}/">❌</a>
+                                </div>
+                            </div>`
+                        );
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+
+
+
+
+        // Delete File
+        $('#documents').on('click', '.delete_file', function (e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+            var that = this;
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                success: function (data) {
+                    if (data.status) {
+                        $(that).parent().parent().fadeOut();
+                    }
+                }
+            });
+        });
+
+        // Submit
+        $('#submit-button').click(function () {
+            $('#submit-form').submit();
+        });
+    </script>
+</body>
+
+</html>

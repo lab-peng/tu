@@ -21,11 +21,13 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
+                <th></th>
             </tr>
             {% for p in project_list %}
             <tr>
                 <td>{{p.id}}</td>
                 <td><a href="{% url 'app_a:project_detail' p.pk %}">{{p.name}}</a></td>
+                <td><a href="{% url 'app_a:project_update' p.pk %}">Update</a></td>
             </tr>
             {% endfor %}
         </table>
@@ -35,6 +37,19 @@
             <button class="sample-button" @click="toggleLovHate()">Click Me & See</button>
             <h1>[[ message ]]</h1>
         </div>
+        <div style="display: flex; 
+                align-items: start;
+                column-gap: 1rem;">
+                <div>Edit and Delete</div>
+            <div>📘</div>
+            <div>❌</div>
+            <div>And others</div>
+            <div>🔥</div>
+            <div>❤️</div>
+        </div>
+        <hr>
+        <h4>Check out more on this video if you want to submit a file together with other fields</h4>
+        <div>https://www.youtube.com/watch?v=1Y28xEn-XGo&t=296s</div>
 
 
 
@@ -48,11 +63,11 @@
             delimiters: ["[[", "]]"],
             el: '#app',
             data: {
-                message: 'Reason',
+                message: '✔️',
             },
             methods: {
                 toggleLovHate: function() {
-                    this.message = ('Passion' === this.message) ? 'Reason' : 'Passion';
+                    this.message = ('❌' === this.message) ? '✔️' : '❌';
                 }
             }
           });

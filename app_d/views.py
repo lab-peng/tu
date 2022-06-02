@@ -1,11 +1,14 @@
 import json
-from re import M
+# from re import M
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.views.generic import ListView
 from django.shortcuts import redirect, render
-from app_d.forms import SampleModelForm
+from app_d.forms import SampleModelForm, SearchForm
 from .models import SampleModel
+
+from django.http import QueryDict
+import urllib
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
@@ -13,9 +16,22 @@ def is_ajax(request):
 class SampleModelList(ListView):
     model = SampleModel
 
+    # def get(request, *args, **kwargs):
+    #     print('hello')
+    #     return super().get(*args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.GET:
+            kwargs = {k: v for k, v in self.request.GET.items()}
+            print(kwargs)
+            queryset = queryset.filter(**kwargs)
+        return queryset
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = SampleModelForm()
+        context['search_form'] = SearchForm()
         return context
     
 def create_update(request):

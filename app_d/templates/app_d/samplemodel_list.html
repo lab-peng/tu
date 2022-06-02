@@ -80,9 +80,22 @@
     </div>
     <!-- main -->
     <div class="main">
-        <!-- <div class="search">
-            search
-        </div> -->
+        <form novalidate>
+        <div class="search">
+            {% for field in search_form %}
+            <div class="form-field">
+                {{ field.label_tag }}
+                <div class="field">
+                    {{ field }}
+                </div>
+            </div>
+            {% endfor %}
+            <div class="form-field">
+                    <a class="reset-button" href="{% url 'app_d:list' %}">Reset</a>
+                    <button class="search-button">Search</button>
+            </div>
+        </div>
+        </form>
         <div class="actions">
             <button class="green" id="create-button">Create</button>
             <button class="orange disabled" id="update-button" disabled>Update</button>
@@ -118,15 +131,20 @@
                         <td>{{ s.decimal }}</td>
                         <!-- <td>{{ s.text|truncatewords:3 }}</td> -->
                         <!-- truncatewords 只能用于外文单词 -->
-                        <td>{{ s.text|truncatechars:12 }}</td>
+                        <td>{{ s.text|truncatewords:3 }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-        <!-- <div class="pagination">
-            pagination
-        </div> -->
+        <div class="pagination">
+            <ul>
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+                <li>4</li>
+            </ul>
+        </div>
     </div>
     <!-- modals-->
     <div class="overlay delete-overlay">
