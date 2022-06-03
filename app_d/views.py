@@ -23,7 +23,8 @@ class SampleModelList(ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         if self.request.GET:
-            kwargs = {k: v for k, v in self.request.GET.items()}
+            print(self.request.GET)
+            kwargs = {k: self.request.GET.getlist(k) for k, v in self.request.GET.items()}
             print(kwargs)
             queryset = queryset.filter(**kwargs)
         return queryset
