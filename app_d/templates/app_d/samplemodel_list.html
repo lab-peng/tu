@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load filter_pag_order %}
 <html lang="en">
 
 <head>
@@ -80,7 +81,7 @@
     </div>
     <!-- main -->
     <div class="main">
-        <form novalidate>
+        <form novalidate id="search_form">
         <div class="search">
             {% for field in search_form %}
             <div class="form-field">
@@ -109,10 +110,22 @@
                     <th class="id-row"><input type="checkbox" id="toggle-checkboxes"></th>
                     <th>Shorter Characters</th>
                     <th class="title">Boolean</th>
-                    <th>Date</th>
+                    <th style="display: flex; 
+                    justify-content: space-between; 
+                    align-items: center;">
+                    <a style="text-decoration: none;" href="{% relative_url '-date' 'order_by' request.GET.urlencode %}">🔽</a>
+                    <span>Date</span>
+                    <a style="text-decoration: none;" href="{% relative_url 'date' 'order_by' request.GET.urlencode %}">🔼</a>
+                    </th>
                     <th>Longer Characters</th>
                     <th>Date & Time</th>
-                    <th>Integer</th>
+                    <th style="display: flex; 
+                    justify-content: space-between; 
+                    align-items: center;">
+                    <a style="text-decoration: none;" href="{% relative_url '-integer' 'order_by' request.GET.urlencode %}">🔽</a>
+                    <span>Integer</span>
+                    <a style="text-decoration: none;" href="{% relative_url 'integer' 'order_by' request.GET.urlencode %}">🔼</a>
+                    </th>
                     <th>Float</th>
                     <th>Decimal Number</th>
                     <th>Text</th>
@@ -138,11 +151,28 @@
             </table>
         </div>
         <div class="pagination">
+            <div>Total {{ page_obj.paginator.count }} records in {{page_obj.paginator.num_pages}} pages</div>
             <ul>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
+                {% if page_obj.has_previous %}
+                    <a class="page-link {% if i == page_obj.previous_page_number %}active{% endif %}" href="{% relative_url page_obj.previous_page_number 'page' request.GET.urlencode %}">prev</a>
+                {% endif %}
+
+                {% for i in page_obj.paginator.page_range %}
+                    {% if i == 1 %}
+                        <a class="page-link {% if i == page_obj.number %}active{% endif %}" href="{% relative_url i 'page' request.GET.urlencode %}">|&lt;</a>
+                    {% elif i == page_obj.paginator.num_pages %}
+                        <a class="page-link {% if i == page_obj.number %}active{% endif %}" href="{% relative_url i 'page' request.GET.urlencode %}">&gt;|</a>
+                    {% else %}
+                        <a class="page-link {% if i == page_obj.number %}active{% endif %}" href="{% relative_url i 'page' request.GET.urlencode %}">{{ i }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <a class="page-link {% if i == page_obj.next_page_number %}active{% endif %}" href="{% relative_url page_obj.next_page_number 'page' request.GET.urlencode %}">next</a>
+                {% endif %}
+
+                <input type="text" step="1" min="1" max="{{ page_obj.paginator.num_pages }}" id="page-input">
+                <a class="page-link active" href="javascript:goPage()">GO</a>
             </ul>
         </div>
     </div>
@@ -187,6 +217,39 @@
     <script src="{% static 'app_d/js/ajax.js' %}"></script>
     <script src="{% static 'app_d/js/modals.js' %}"></script>
     <script src="{% static 'app_d/js/main.js' %}"></script>
+    <script>
+        var search_str = window.location.search.substring(1)
+        var str_list = search_str.split("&");
+        for (let i = 0; i < str_list.length; i++) {
+            const pair = str_list[i].split("=")
+            const [name, value] = pair
+
+            // for checkboxes
+            if (name.endsWith("__in")) {
+                for (let j = 0; j < pair.length; j++) {
+                    if (value) {
+                        $(`input[name=${name}][value=${value}]`).prop("checked", true)
+                    }
+                }
+            } 
+            // for input fields
+            else {
+                // let sel = $("select[name=" + str1[0] + "]");
+                // let sel = $(`select[name='${str1[0]}']`);
+                // sel.val(decodeURIComponent(str1[1]));
+                 $(`input[name=${name}]`).val(decodeURIComponent(value));
+                // $(`input[name=${name}]`).val(value);
+            }
+        }
+
+        function goPage() {
+            let page = $("#page-input").val();
+            max = '{{ page_obj.paginator.num_pages }}';
+            if (Number.isInteger(Number(page)) && Number(page) <= Number(max)) {
+                location.href = `{% relative_url '${page}' 'page' request.GET.urlencode %}`.replaceAll('&amp;', '&');
+            }
+        }
+    </script>
 </body>
 
 </html>

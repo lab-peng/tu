@@ -1,5 +1,8 @@
 FROM python:3.10
 
+# Ensure logging is up to date despite possible buffering
+ENV PYTHONUNBUFFERED 1
+
 WORKDIR /app
 
 

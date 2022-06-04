@@ -32,18 +32,16 @@ class SampleModelForm(forms.ModelForm):
 #             })
 
 
-years = ['2020', '2021', '2022']
-integers = [
-    ('100', '100'),
-    ('200', '200'),
-    ('300', '300'),
-]
+dates = (
+    ('2020-01-01', '2020-01-01'),
+    ('2020-01-02', '2020-01-02'),
+    ('2020-01-03', '2020-01-03'),
+)
 
 class SearchForm(forms.Form):
     char__icontains = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    # date__in = forms.DateField(widget=forms.SelectDateWidget(years=years))
-    integer__in = forms.MultipleChoiceField(
+    date__in = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple,
-        choices=integers,
+        choices=dates,
     )

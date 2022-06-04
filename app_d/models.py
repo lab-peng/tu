@@ -12,3 +12,6 @@ class SampleModel(models.Model):
     float_info = models.FloatField(blank=True, null=True, verbose_name='Float')
     decimal = models.DecimalField(max_digits=14, decimal_places=2, blank=True, null=True, verbose_name='Decimal Number')
     text = models.TextField(blank=True, null=True, verbose_name='Long Text')
+
+    class Meta:
+        ordering = ('-date',)

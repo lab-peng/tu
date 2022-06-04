@@ -15,18 +15,14 @@ def is_ajax(request):
 
 class SampleModelList(ListView):
     model = SampleModel
-
-    # def get(request, *args, **kwargs):
-    #     print('hello')
-    #     return super().get(*args, **kwargs)
+    paginate_by = 2
 
     def get_queryset(self):
         queryset = super().get_queryset()
         if self.request.GET:
-            print(self.request.GET)
-            kwargs = {k: self.request.GET.getlist(k) for k, v in self.request.GET.items()}
-            print(kwargs)
-            queryset = queryset.filter(**kwargs)
+            kwargs = {k: (self.request.GET.getlist(k) if k.endswith('__in') else self.request.GET.get(k))
+            for k, v in self.request.GET.items() if v != '' and k != 'page' and k!='order_by'}
+            queryset = queryset.filter(**kwargs).order_by(self.request.GET.get('order_by')) if self.request.GET.get('order_by') else queryset.filter(**kwargs)
         return queryset
 
     def get_context_data(self, **kwargs):
