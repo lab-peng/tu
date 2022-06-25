@@ -8,12 +8,20 @@ $(function () {
     });
 
     // get all field names as an array
+    // let fields = $("[name]").map(function () {
     let fields = $("[name]").map(function () {
-        if ($(this).attr("name") !== 'csrfmiddlewaretoken' && $(this).attr("name") !== 'viewport') {
+        if ($(this).attr("name") !== 'csrfmiddlewaretoken'
+            && $(this).attr("name") !== 'viewport'
+            && $(this).attr("name") !== 'char__icontains'
+            && $(this).attr("name") !== 'date__in'
+            && $(this).attr("name") !== 'ids'
+            && $(this).attr("name") !== 'post_ids'
+        ) {
             return $(this).attr("name");
         }
     }).get();
     fields = $.unique(fields)
+    console.log(fields)
 
 
     // view part 
@@ -142,6 +150,7 @@ $(function () {
                 else {
                     // on error display the error message
                     let errors = response.errors;
+                    console.log(errors);
                     for (let i = 0; i < fields.length; i++) {
                         let field = fields[i];
                         let error = errors[field];

@@ -52,3 +52,7 @@
 .lefter ul li:hover::after {
     color: white;
 }
+
+.lefter a {
+    text-decoration: none;
+}

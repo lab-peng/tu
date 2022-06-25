@@ -15,6 +15,11 @@ docker run -p 8001:8000 django-tu:1.0
 docker-compose build
 docker-compose up
 
+
+# run commands in the container with the host machine: (docker-compose up is still running)
+docker exec -it django-tu-container python manage.py makemigrations app_e
+docker exec -it django-tu-container python manage.py migrate app_e
+
 mysql database setup should be: 'HOST': 'host.docker.internal',
 
 # elastic search 

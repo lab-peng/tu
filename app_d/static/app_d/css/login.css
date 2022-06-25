@@ -1,0 +1,54 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: JetBrains Mono, Noto Sans, monospace;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    place-items: center;
+}
+
+form {
+    /* background-color: azure; */
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.errors {
+    color: red;
+    font-size: 0.7rem;
+}
+
+td {
+    width: 4rem;
+    height: 2rem;
+}
+
+input {
+    height: 2rem;
+    font-family: JetBrains Mono, Noto Sans, monospace;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+input[type=submit] {
+    width: 5rem;
+    margin: 0 auto;
+    cursor: pointer;
+    border: none;
+    background-color: #24695c;
+    border-radius: 3px;
+    color: white;
+    font-family: JetBrains Mono, Noto Sans, monospace;
+    transform: opacity 0.15s;
+}
+
+input[type=submit]:hover {
+    opacity: 0.8;
+}

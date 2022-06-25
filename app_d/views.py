@@ -1,21 +1,44 @@
 import json
-# from re import M
+
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.views.generic import ListView
 from django.shortcuts import redirect, render
+
+from django.contrib.auth import logout
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
+
 from app_d.forms import SampleModelForm, SearchForm
 from .models import SampleModel
 
-from django.http import QueryDict
-import urllib
+
+# custom error pages
+def custom_error_403(request, exception):
+    return render(request, 'errors/403.html', {})
+
+def custom_error_404(request, exception): # Only works when debug set to False
+    return render(request, 'errors/404.html', {})
+
+def log_out(request):
+    logout(request)
+    return redirect('login') 
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
-class SampleModelList(ListView):
+@login_required
+def alpha(request):
+    return render(request, 'app_d/alpha.html')
+
+
+class SampleModelList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = SampleModel
     paginate_by = 5
+
+    permission_required = ('app_d.view_samplemodel', )
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -30,7 +53,9 @@ class SampleModelList(ListView):
         context['form'] = SampleModelForm()
         context['search_form'] = SearchForm()
         return context
-    
+
+@login_required
+@permission_required('app_d.add_samplemodel')
 def create_update(request):
     # request should be ajax and method should be POST.
     if is_ajax(request) and request.method == "POST":
