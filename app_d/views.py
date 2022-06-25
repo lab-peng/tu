@@ -37,7 +37,7 @@ def alpha(request):
 class SampleModelList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = SampleModel
     paginate_by = 5
-
+    login_url = '/login/'
     permission_required = ('app_d.view_samplemodel', )
 
     def get_queryset(self):
@@ -55,7 +55,7 @@ class SampleModelList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return context
 
 @login_required
-@permission_required('app_d.add_samplemodel')
+@permission_required(['app_d.add_samplemodel', 'app_d.change_samplemodel'])
 def create_update(request):
     # request should be ajax and method should be POST.
     if is_ajax(request) and request.method == "POST":
@@ -84,7 +84,8 @@ def create_update(request):
                 return JsonResponse({"errors": errors})
     return JsonResponse({"errors": ""}, status=400)
 
-
+@login_required
+@permission_required(['app_d.add_samplemodel', 'app_d.change_samplemodel'])
 def get_update_info(request):
     if request.method == 'POST':
         ids = request.POST.get('ids')
@@ -95,6 +96,8 @@ def get_update_info(request):
     else:
         return JsonResponse({'status':0})   
 
+@login_required
+@permission_required(['app_d.delete_samplemodel', ])
 def delete(request):
     if request.method == 'POST':
         ids = request.POST.get('ids')

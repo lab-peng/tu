@@ -125,7 +125,8 @@ $(function () {
                     }).get();
                     if (!ids.includes(response.instance.id.toString())) { 
                         // on successfull creating an object
-                        location.href = '/app_d/'
+                        const nextUrl = $('.main-title').data('path')
+                        location.href = nextUrl
                     } else {
                         // on successfull updating objects
                         $('.create-overlay').css('display', 'none');
@@ -181,7 +182,9 @@ $(function () {
                 },
                 success: function (response) {
                     // console.log(response)
-                    location.href = '/app_d/'
+                    const nextUrl = $('.main-title').data('path')
+                    console.log(nextUrl)
+                    location.href = nextUrl
                     // if (response.status) {
                     //     // row.remove();
                     //     row.fadeOut();

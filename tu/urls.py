@@ -14,7 +14,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('__debug__/', include('debug_toolbar.urls')),
 
-    path('accounts/login/', auth_views.LoginView.as_view(template_name="app_d/login.html", extra_context={'next':'/app_d/alpha/'}), name='login'),
+    path('login/', auth_views.LoginView.as_view(template_name="app_d/login.html", extra_context={'next':'/app_d/alpha/'}), name='login'),
 
     path('', include('app_a.urls')),
     # path('app_b/', include('app_b.urls')),

@@ -26,9 +26,15 @@
         </div>
     </form>
     <div class="actions">
-        <button class="green" id="create-button">Create</button>
+        {% if perms.app_d.add_samplemodel %}
+        <button class="green" id="create-button" data-next="{{ request.get_full_path }}">Create</button>
+        {% endif %}
+        {% if perms.app_d.change_samplemodel %}
         <button class="orange disabled" id="update-button" disabled>Update</button>
+        {% endif %}
+        {% if perms.app_d.delete_samplemodel %}
         <button class="red disabled" id="delete-button" disabled>Delete</button>
+        {% endif %}
         <button class="yellow">Yellow</button>
         <button class="green"><a href="#">Green</a></button>
     </div>
@@ -36,7 +42,16 @@
         <table>
             <thead>
                 <th class="id-row"><input type="checkbox" id="toggle-checkboxes"></th>
-                <th>Shorter Characters</th>
+                <!-- <th>Shorter Characters</th> -->
+                <th style="display: flex; 
+                justify-content: space-between; 
+                align-items: center;">
+                    <a style="text-decoration: none;"
+                        href="{% relative_url '-char' 'order_by' request.GET.urlencode %}">🔽</a>
+                    <span>Char</span>
+                    <a style="text-decoration: none;"
+                        href="{% relative_url 'char' 'order_by' request.GET.urlencode %}">🔼</a>
+                </th>
                 <th class="title">Boolean</th>
                 <th style="display: flex; 
                 justify-content: space-between; 
@@ -69,7 +84,7 @@
                     <td class="title">{{ s.char }}</td>
                     <td>{{ s.bool }}</td>
                     <td>{{ s.date|date:"Y-m-d" }}</td>
-                    <td class="long">{{ s.longer_char }}</td>
+                    <td class="long">{{ s.longer_char|truncatewords:3 }}</td>
                     <td>{{ s.datetime|date:"Y-m-d H:i:s" }}</td>
                     <td>{{ s.integer }}</td>
                     <td>{{ s.float_info }}</td>
@@ -161,34 +176,33 @@
 <script>
     var search_str = window.location.search.substring(1)
     var str_list = search_str.split("&");
-    console.log(str_list, typeof(str_list), str_list[0] === '')
-    if (str_list.length !== 1 ||  (str_list.length === 1 && str_list[0] !== '')) {
+    if (str_list.length > 0) {
         for (let i = 0; i < str_list.length; i++) {
             const pair = str_list[i].split("=")
-            const [name, value] = pair
-
-            // for checkboxes
-            if (name.endsWith("__in")) {
-                for (let j = 0; j < pair.length; j++) {
-                    if (value) {
-                        $(`input[name=${name}][value=${value}]`).prop("checked", true)
+            if (pair[0] !== '') {
+                const [name, value] = pair
+                // for checkboxes
+                if (name.endsWith("__in")) {
+                    for (let j = 0; j < pair.length; j++) {
+                        if (value) {
+                            $(`input[name=${name}][value=${value}]`).prop("checked", true)
+                        }
                     }
                 }
-            }
-            // for input fields
-            else {
-                // let sel = $("select[name=" + str1[0] + "]");
-                // let sel = $(`select[name='${str1[0]}']`);
-                // sel.val(decodeURIComponent(str1[1]));
-                $(`input[name=${name}]`).val(decodeURIComponent(value));
-                // $(`input[name=${name}]`).val(value);
+                // for input fields
+                else {
+                    // let sel = $("select[name=" + str1[0] + "]");
+                    // let sel = $(`select[name='${str1[0]}']`);
+                    // sel.val(decodeURIComponent(str1[1]));
+                    $(`input[name=${name}]`).val(decodeURIComponent(value));
+                }
             }
         }
     }
     function goPage() {
         let page = $("#page-input").val();
         max = '{{ page_obj.paginator.num_pages }}';
-        if (Number.isInteger(Number(page)) && Number(page) <= Number(max)) {
+        if (page !== '' && Number.isInteger(Number(page)) && Number(page) <= Number(max)) {
             location.href = `{% relative_url '${page}' 'page' request.GET.urlencode %}`.replaceAll('&amp;', '&');
         }
     }

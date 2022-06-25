@@ -14,4 +14,4 @@ class SampleModel(models.Model):
     text = models.TextField(blank=True, null=True, verbose_name='Long Text')
 
     class Meta:
-        ordering = ('-date',)
+        ordering = ('char',)
